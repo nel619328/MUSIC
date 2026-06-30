@@ -1,33 +1,33 @@
 const songs = [
 {
     title: "Miles Can't Change Us",
-    logo: "songs/1/logo.png",
-    cover: "songs/1/cover.jpg",
-    audio: "songs/1/Miles Can't Change Us.mp3"
+    logo: "songs/song1/logo.png",
+    cover: "songs/song1/cover.jpg",
+    audio: "songs/song1/Miles Can't Change Us"
 },
 {
     title: "Faded",
-    logo: "songs/2/logo.png",
-    cover: "songs/2/cover.jpg",
-    audio: "songs/2/song.mp3"
+    logo: "songs/song2/logo.png",
+    cover: "songs/song2/cover.jpg",
+    audio: "songs/song2/song.mp3"
 },
 {
     title: "Alone",
-    logo: "songs/3/logo.png",
-    cover: "songs/3/cover.jpg",
-    audio: "songs/3/song.mp3"
+    logo: "songs/song3/logo.png",
+    cover: "songs/song3/cover.jpg",
+    audio: "songs/song3/song.mp3"
 },
 {
     title: "On My Way",
-    logo: "songs/4/logo.png",
-    cover: "songs/4/cover.jpg",
-    audio: "songs/4/song.mp3"
+    logo: "songs/song4/logo.png",
+    cover: "songs/song4/cover.jpg",
+    audio: "songs/song4/song.mp3"
 },
 {
     title: "Unity",
-    logo: "songs/5/logo.png",
-    cover: "songs/5/cover.jpg",
-    audio: "songs/5/song.mp3"
+    logo: "songs/song5/logo.png",
+    cover: "songs/song5/cover.jpg",
+    audio: "songs/song5/song.mp3"
 }
 ];
 
@@ -53,12 +53,10 @@ function loadSong(index){
     cover.src = songs[index].cover;
     title.textContent = songs[index].title;
 
-    audio.play();
-
-    playBtn.innerHTML = "⏸";
-    cover.classList.add("playing");
-
+    audio.load();
 }
+
+loadSong(0);
 
 // Play / Pause
 function playPause(){
@@ -89,6 +87,10 @@ function nextSong(){
     }
 
     loadSong(currentSong);
+    audio.play();
+
+    playBtn.innerHTML = "⏸";
+    cover.classList.add("playing");
 
 }
 
@@ -102,32 +104,40 @@ function prevSong(){
     }
 
     loadSong(currentSong);
+    audio.play();
+
+    playBtn.innerHTML = "⏸";
+    cover.classList.add("playing");
 
 }
+
+// Auto Next
+audio.addEventListener("ended", nextSong);
 
 // Progress
 audio.addEventListener("timeupdate",()=>{
 
-    if(!audio.duration) return;
+    if(audio.duration){
 
-    progress.value = (audio.currentTime / audio.duration) * 100;
+        progress.value = (audio.currentTime / audio.duration) * 100;
 
-    current.textContent = formatTime(audio.currentTime);
-    duration.textContent = formatTime(audio.duration);
+        current.textContent = formatTime(audio.currentTime);
+        duration.textContent = formatTime(audio.duration);
+
+    }
 
 });
 
 // Seek
 progress.addEventListener("input",()=>{
 
-    if(!audio.duration) return;
+    if(audio.duration){
 
-    audio.currentTime = (progress.value / 100) * audio.duration;
+        audio.currentTime = (progress.value / 100) * audio.duration;
+
+    }
 
 });
-
-// Auto Next
-audio.addEventListener("ended",nextSong);
 
 // Format Time
 function formatTime(time){
@@ -139,12 +149,12 @@ function formatTime(time){
 
 }
 
-// Open / Close Playlist
-cover.onclick = ()=>{
+// Open Playlist
+cover.addEventListener("click",()=>{
 
     playlist.classList.toggle("active");
 
-};
+});
 
 // Create Playlist
 songs.forEach((song,index)=>{
@@ -161,6 +171,12 @@ songs.forEach((song,index)=>{
     item.onclick = ()=>{
 
         loadSong(index);
+
+        audio.play();
+
+        playBtn.innerHTML = "⏸";
+        cover.classList.add("playing");
+
         playlist.classList.remove("active");
 
     };
@@ -169,27 +185,20 @@ songs.forEach((song,index)=>{
 
 });
 
-// Keyboard Shortcuts
+// Keyboard
 document.addEventListener("keydown",(e)=>{
 
-    switch(e.code){
+    if(e.code==="Space"){
+        e.preventDefault();
+        playPause();
+    }
 
-        case "Space":
-            e.preventDefault();
-            playPause();
-            break;
+    if(e.code==="ArrowRight"){
+        nextSong();
+    }
 
-        case "ArrowRight":
-            nextSong();
-            break;
-
-        case "ArrowLeft":
-            prevSong();
-            break;
-
+    if(e.code==="ArrowLeft"){
+        prevSong();
     }
 
 });
-
-// Load First Song
-loadSong(0);
