@@ -1,13 +1,35 @@
-const songs = [];
-
-for (let i = 1; i <= 10; i++) {
-    songs.push({
-        title: `Song ${i}`,
-        logo: `songs/${i}/logo.png`,
-        cover: `songs/${i}/cover.jpg`,
-        audio: `songs/${i}/song.mp3`
-    });
+const songs = [
+{
+    title: "Believer",
+    logo: "songs/1/logo.png",
+    cover: "songs/1/cover.jpg",
+    audio: "songs/1/Miles Can't Change Us.mp3"
+},
+{
+    title: "Faded",
+    logo: "songs/2/logo.png",
+    cover: "songs/2/cover.jpg",
+    audio: "songs/2/song.mp3"
+},
+{
+    title: "Alone",
+    logo: "songs/3/logo.png",
+    cover: "songs/3/cover.jpg",
+    audio: "songs/3/song.mp3"
+},
+{
+    title: "On My Way",
+    logo: "songs/4/logo.png",
+    cover: "songs/4/cover.jpg",
+    audio: "songs/4/song.mp3"
+},
+{
+    title: "Unity",
+    logo: "songs/5/logo.png",
+    cover: "songs/5/cover.jpg",
+    audio: "songs/5/song.mp3"
 }
+];
 
 const audio = document.getElementById("audio");
 const logo = document.getElementById("logo");
@@ -22,7 +44,7 @@ const playBtn = document.querySelector(".play");
 let currentSong = 0;
 
 // Load Song
-function loadSong(index) {
+function loadSong(index){
 
     currentSong = index;
 
@@ -39,15 +61,15 @@ function loadSong(index) {
 }
 
 // Play / Pause
-function playPause() {
+function playPause(){
 
-    if (audio.paused) {
+    if(audio.paused){
 
         audio.play();
         playBtn.innerHTML = "⏸";
         cover.classList.add("playing");
 
-    } else {
+    }else{
 
         audio.pause();
         playBtn.innerHTML = "▶";
@@ -58,106 +80,114 @@ function playPause() {
 }
 
 // Next
-function nextSong() {
+function nextSong(){
 
     currentSong++;
 
-    if (currentSong >= songs.length)
+    if(currentSong >= songs.length){
         currentSong = 0;
+    }
 
     loadSong(currentSong);
 
 }
 
 // Previous
-function prevSong() {
+function prevSong(){
 
     currentSong--;
 
-    if (currentSong < 0)
+    if(currentSong < 0){
         currentSong = songs.length - 1;
+    }
 
     loadSong(currentSong);
 
 }
 
-// Update Progress
-audio.addEventListener("timeupdate", () => {
+// Progress
+audio.addEventListener("timeupdate",()=>{
 
-    if (!audio.duration) return;
+    if(!audio.duration) return;
 
     progress.value = (audio.currentTime / audio.duration) * 100;
 
-    current.textContent = format(audio.currentTime);
-    duration.textContent = format(audio.duration);
+    current.textContent = formatTime(audio.currentTime);
+    duration.textContent = formatTime(audio.duration);
 
 });
 
 // Seek
-progress.addEventListener("input", () => {
+progress.addEventListener("input",()=>{
 
-    if (!audio.duration) return;
+    if(!audio.duration) return;
 
     audio.currentTime = (progress.value / 100) * audio.duration;
 
 });
 
 // Auto Next
-audio.addEventListener("ended", nextSong);
+audio.addEventListener("ended",nextSong);
 
 // Format Time
-function format(sec) {
+function formatTime(time){
 
-    const m = Math.floor(sec / 60);
-    const s = Math.floor(sec % 60);
+    const min = Math.floor(time / 60);
+    const sec = Math.floor(time % 60);
 
-    return `${m}:${s < 10 ? "0" : ""}${s}`;
+    return `${min}:${sec < 10 ? "0" : ""}${sec}`;
 
 }
 
-// Playlist Toggle
-cover.onclick = () => {
+// Open / Close Playlist
+cover.onclick = ()=>{
 
     playlist.classList.toggle("active");
 
 };
 
 // Create Playlist
-for (let i = 0; i < songs.length; i++) {
+songs.forEach((song,index)=>{
 
-    playlist.innerHTML += `
-        <div class="song" onclick="selectSong(${i})">
-            <img src="${songs[i].cover}">
-            <div class="song-name">${songs[i].title}</div>
-        </div>
+    const item = document.createElement("div");
+
+    item.className = "song";
+
+    item.innerHTML = `
+        <img src="${song.cover}">
+        <div class="song-name">${song.title}</div>
     `;
 
-}
+    item.onclick = ()=>{
 
-// Select Song
-function selectSong(index) {
+        loadSong(index);
+        playlist.classList.remove("active");
 
-    loadSong(index);
+    };
 
-    playlist.classList.remove("active");
+    playlist.appendChild(item);
 
-}
+});
 
 // Keyboard Shortcuts
-document.addEventListener("keydown", e => {
+document.addEventListener("keydown",(e)=>{
 
-    if (e.code === "Space") {
+    switch(e.code){
 
-        e.preventDefault();
-        playPause();
+        case "Space":
+            e.preventDefault();
+            playPause();
+            break;
+
+        case "ArrowRight":
+            nextSong();
+            break;
+
+        case "ArrowLeft":
+            prevSong();
+            break;
 
     }
-
-    if (e.code === "ArrowRight")
-        nextSong();
-
-    if (e.code === "ArrowLeft")
-        prevSong();
 
 });
 
