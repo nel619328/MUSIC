@@ -1,38 +1,57 @@
 const songs = [
 {
     title: "Miles Can't Change Us",
-    logo: "songs/song1/logo.png",
     cover: "songs/song1/cover.png",
     audio: "songs/song1/Miles Can't Change Us.mp3"
 },
 {
     title: "Faded",
-    logo: "songs/song2/logo.png",
     cover: "songs/song2/cover.jpg",
     audio: "songs/song2/song.mp3"
 },
 {
     title: "Alone",
-    logo: "songs/song3/logo.png",
     cover: "songs/song3/cover.jpg",
     audio: "songs/song3/song.mp3"
 },
 {
     title: "On My Way",
-    logo: "songs/song4/logo.png",
     cover: "songs/song4/cover.jpg",
     audio: "songs/song4/song.mp3"
 },
 {
     title: "Unity",
-    logo: "songs/song5/logo.png",
     cover: "songs/song5/cover.jpg",
     audio: "songs/song5/song.mp3"
+},
+{
+    title: "Song 6",
+    cover: "songs/song6/cover.jpg",
+    audio: "songs/song6/song.mp3"
+},
+{
+    title: "Song 7",
+    cover: "songs/song7/cover.jpg",
+    audio: "songs/song7/song.mp3"
+},
+{
+    title: "Song 8",
+    cover: "songs/song8/cover.jpg",
+    audio: "songs/song8/song.mp3"
+},
+{
+    title: "Song 9",
+    cover: "songs/song9/cover.jpg",
+    audio: "songs/song9/song.mp3"
+},
+{
+    title: "Song 10",
+    cover: "songs/song10/cover.jpg",
+    audio: "songs/song10/song.mp3"
 }
 ];
 
 const audio = document.getElementById("audio");
-const logo = document.getElementById("logo");
 const cover = document.getElementById("cover");
 const title = document.getElementById("title");
 const progress = document.getElementById("progress");
@@ -49,13 +68,14 @@ function loadSong(index){
     currentSong = index;
 
     audio.src = songs[index].audio;
-    logo.src = songs[index].logo;
     cover.src = songs[index].cover;
     title.textContent = songs[index].title;
 
     audio.load();
+
 }
 
+// Load First Song
 loadSong(0);
 
 // Play / Pause
@@ -164,7 +184,7 @@ songs.forEach((song,index)=>{
     item.className = "song";
 
     item.innerHTML = `
-        <img src="${song.cover}">
+        <img src="${song.cover}" alt="${song.title}">
         <div class="song-name">${song.title}</div>
     `;
 
@@ -185,7 +205,7 @@ songs.forEach((song,index)=>{
 
 });
 
-// Keyboard
+// Keyboard Shortcuts
 document.addEventListener("keydown",(e)=>{
 
     if(e.code==="Space"){
