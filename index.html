@@ -19,50 +19,46 @@
 }
 
 body{
-    overflow:hidden;
     background:#000;
+    overflow:hidden;
 }
 
+/* Background */
 .background{
     position:fixed;
     inset:0;
-    background:url("cover/cover.jpg") center center/cover no-repeat;
-    filter:brightness(.3);
-    z-index:-2;
+    background:url("cover/cover.jpg") center/cover no-repeat;
+    filter:brightness(.35);
+    z-index:-1;
 }
 
-.background::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:rgba(0,0,0,.35);
-}
-
+/* Player */
 .player{
     position:absolute;
     left:50%;
     top:50%;
     transform:translate(-50%,-50%);
-    width:400px;
+    width:360px;
+    max-width:92%;
     text-align:center;
 }
 
+/* Logo */
 .logo{
     width:220px;
-    max-height:90px;
-    object-fit:contain;
+    max-width:80%;
     margin-bottom:20px;
 }
 
+/* Cover */
 .cover{
-    width:200px;
-    height:200px;
+    width:220px;
+    height:220px;
     border-radius:50%;
     object-fit:cover;
-    border:6px solid rgba(255,255,255,.15);
-    box-shadow:0 0 25px rgba(0,0,0,.5);
+    border:5px solid rgba(255,255,255,.15);
+    box-shadow:0 0 30px rgba(0,0,0,.5);
     cursor:pointer;
-    transition:.3s;
 }
 
 .cover.playing{
@@ -70,27 +66,8 @@ body{
 }
 
 @keyframes spin{
-from{transform:rotate(0);}
-to{transform:rotate(360deg);}
-}
-
-.left-speaker{
-    position:absolute;
-    left:-40px;
-    top:165px;
-    width:40px;
-}
-
-.right-speaker{
-    position:absolute;
-    right:-40px;
-    top:165px;
-    width:40px;
-}
-
-.bottom-speaker{
-    width:100%;
-    margin-top:20px;
+    from{transform:rotate(0);}
+    to{transform:rotate(360deg);}
 }
 
 .song-info{
@@ -99,15 +76,16 @@ to{transform:rotate(360deg);}
 }
 
 .song-title{
-    font-size:24px;
+    font-size:25px;
     font-weight:bold;
 }
 
 .artist{
-    color:#ccc;
+    color:#ddd;
     margin-top:5px;
 }
 
+/* Progress */
 .progress-area{
     margin-top:20px;
 }
@@ -124,11 +102,12 @@ to{transform:rotate(360deg);}
     margin-top:5px;
 }
 
+/* Controls */
 .controls{
-    margin-top:20px;
     display:flex;
     justify-content:center;
-    gap:15px;
+    gap:18px;
+    margin-top:25px;
 }
 
 .controls button{
@@ -138,6 +117,7 @@ to{transform:rotate(360deg);}
     border-radius:50%;
     cursor:pointer;
     font-size:22px;
+    background:#fff;
 }
 
 .play{
@@ -146,15 +126,17 @@ to{transform:rotate(360deg);}
     font-size:30px!important;
 }
 
+/* Playlist */
 .playlist{
     position:fixed;
     top:0;
-    right:-350px;
-    width:350px;
+    right:-330px;
+    width:330px;
     height:100%;
     background:#111;
-    transition:.4s;
+    color:#fff;
     overflow-y:auto;
+    transition:.35s;
     padding:20px;
 }
 
@@ -163,7 +145,6 @@ to{transform:rotate(360deg);}
 }
 
 .playlist h2{
-    color:#fff;
     text-align:center;
     margin-bottom:20px;
 }
@@ -171,12 +152,12 @@ to{transform:rotate(360deg);}
 .song{
     display:flex;
     align-items:center;
-    gap:15px;
-    color:#fff;
+    gap:12px;
     padding:10px;
-    cursor:pointer;
-    border-radius:10px;
     margin-bottom:10px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.2s;
 }
 
 .song:hover{
@@ -186,8 +167,8 @@ to{transform:rotate(360deg);}
 .song img{
     width:60px;
     height:60px;
-    object-fit:cover;
     border-radius:8px;
+    object-fit:cover;
 }
 
 .song-name{
@@ -197,17 +178,12 @@ to{transform:rotate(360deg);}
 @media(max-width:768px){
 
 .player{
-width:90%;
-}
-
-.left-speaker,
-.right-speaker{
-display:none;
+    width:92%;
 }
 
 .playlist{
-width:100%;
-right:-100%;
+    width:100%;
+    right:-100%;
 }
 
 }
@@ -221,17 +197,13 @@ right:-100%;
 
 <div class="player">
 
-<img src="songs/1/logo.png" id="logo" class="logo">
+<img id="logo" class="logo" src="songs/song1/logo.png">
 
-<img src="songs/1/cover.jpg" id="cover" class="cover">
-
-<img src="speakers/left.png" class="left-speaker">
-
-<img src="speakers/right.png" class="right-speaker">
+<img id="cover" class="cover" src="songs/song1/cover.jpg">
 
 <div class="song-info">
-<div class="song-title" id="title">Loading...</div>
-<div class="artist">Music Player</div>
+    <div id="title" class="song-title">Loading...</div>
+    <div class="artist">Music Player</div>
 </div>
 
 <div class="progress-area">
@@ -255,16 +227,10 @@ right:-100%;
 
 </div>
 
-<img src="speakers/bottom.png" class="bottom-speaker">
-
 </div>
 
 <div class="playlist" id="playlist">
-
 <h2>Playlist</h2>
-
-<!-- script.js will automatically add songs here -->
-
 </div>
 
 <audio id="audio"></audio>
@@ -272,10 +238,10 @@ right:-100%;
 <script src="script.js"></script>
 
 <script>
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./service-worker.js");
-    });
+if("serviceWorker" in navigator){
+window.addEventListener("load",()=>{
+navigator.serviceWorker.register("./service-worker.js");
+});
 }
 </script>
 
