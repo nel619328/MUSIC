@@ -1,6 +1,6 @@
 const songs = [
 {
-    title: "Believer",
+    title: "Miles Can't Change Us",
     logo: "songs/1/logo.png",
     cover: "songs/1/cover.jpg",
     audio: "songs/1/Miles Can't Change Us.mp3"
