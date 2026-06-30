@@ -3,7 +3,7 @@ const songs = [
     title: "Miles Can't Change Us",
     logo: "songs/song1/logo.png",
     cover: "songs/song1/cover.png",
-    audio: "songs/song1/Miles Can't Change Us"
+    audio: "songs/song1/Miles Can't Change Us.mp3"
 },
 {
     title: "Faded",
